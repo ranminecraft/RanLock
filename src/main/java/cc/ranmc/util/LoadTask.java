@@ -45,6 +45,13 @@ public class LoadTask {
         langFile = new File(plugin.getDataFolder(), "lang.yml");
         if (!langFile.exists()) plugin.saveResource("lang.yml", true);
         plugin.setLangYaml(YamlConfiguration.loadConfiguration(langFile));
+
+        if (Bukkit.getPluginManager().getPlugin("Residence") != null) {
+            Bukkit.getConsoleSender().sendMessage(Colorful.valueOf("&a成功加载Residence"));
+            plugin.setResidence(true);
+        } else {
+            Bukkit.getConsoleSender().sendMessage(Colorful.valueOf("&c无法找到Residence"));
+        }
     }
 
     public static void end() {
@@ -54,6 +61,7 @@ public class LoadTask {
         }
         try {
             yaml.save(lockFile);
+            plugin.getTrustYaml().save(trustFile);
         } catch (IOException e) {
             e.printStackTrace();
         }

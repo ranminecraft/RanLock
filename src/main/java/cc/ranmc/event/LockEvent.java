@@ -4,12 +4,14 @@ import cc.ranmc.Main;
 import cc.ranmc.util.BlockUtil;
 import cc.ranmc.util.Colorful;
 import cc.ranmc.util.DataUtil;
+import cc.ranmc.util.ResCheck;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.HopperMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
@@ -26,6 +28,7 @@ public class LockEvent implements Listener {
 
     @EventHandler
     public void onBlockPlaceEvent(BlockPlaceEvent event) {
+        if (event.isCancelled()) return;
         Block block = event.getBlock();
         Player player = event.getPlayer();
         if (plugin.getConfig().getStringList("lock-block").contains(block.getType().toString())) {
@@ -36,11 +39,12 @@ public class LockEvent implements Listener {
 
     @EventHandler
     public void onBlockBreakEvent(BlockBreakEvent event) {
+        if (event.isCancelled()) return;
         Block block = event.getBlock();
         Player player = event.getPlayer();
         String owner = BlockUtil.getOwner(block);
         if (owner.isEmpty()) return;
-        if (player.getName().equalsIgnoreCase(BlockUtil.getOwner(block))) {
+        if (player.getName().equalsIgnoreCase(BlockUtil.getOwner(block)) || plugin.getTrustYaml().getStringList(owner).contains(player.getName()) || player.hasPermission("lock.admin")) {
             plugin.getLockMap().remove(DataUtil.getStrByLoc(block.getLocation()));
             player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("break")));
         } else {
@@ -51,6 +55,7 @@ public class LockEvent implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
+        if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_AIR) return;
         Player player = event.getPlayer();
         Block block = event.getClickedBlock();
         if (block == null) return;
@@ -63,18 +68,25 @@ public class LockEvent implements Listener {
                     player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("cant-lock")));
                     return;
                 }
+                if (!ResCheck.hasPermissom(player, block)) {
+                    player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("residence")));
+                    event.setCancelled(true);
+                    return;
+                }
                 plugin.getLockMap().put(DataUtil.getStrByLoc(block.getLocation()), player.getName());
                 player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("place")));
             }
             return;
         }
-        if (!player.getName().equalsIgnoreCase(owner)) {
+        if (player.getName().equalsIgnoreCase(owner) || plugin.getTrustYaml().getStringList(owner).contains(player.getName()) || player.hasPermission("lock.admin")) {
+            if (plugin.getUnlockAction().contains(player.getName())) {
+                event.setCancelled(true);
+                plugin.getLockMap().remove(DataUtil.getStrByLoc(block.getLocation()));
+                player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("break")));
+            }
+        } else {
             event.setCancelled(true);
             player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("cant-open")).replace("%owner%", owner));
-        } else if (plugin.getUnlockAction().contains(player.getName())) {
-            event.setCancelled(true);
-            plugin.getLockMap().remove(DataUtil.getStrByLoc(block.getLocation()));
-            player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("break")));
         }
         plugin.getUnlockAction().remove(player.getName());
         plugin.getLockAction().remove(player.getName());

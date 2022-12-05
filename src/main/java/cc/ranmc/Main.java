@@ -1,6 +1,7 @@
 package cc.ranmc;
 
 import cc.ranmc.command.LockCommand;
+import cc.ranmc.event.GuiEvent;
 import cc.ranmc.event.LockEvent;
 import cc.ranmc.util.Colorful;
 import cc.ranmc.util.LoadTask;
@@ -30,7 +31,7 @@ public class Main extends JavaPlugin implements Listener {
     private YamlConfiguration lockYaml, trustYaml, langYaml;
     @Getter
     @Setter
-    private HashMap<String, String> lockMap, trustMap;
+    private HashMap<String, String> lockMap;
 
     @Getter
     private static Main instance;
@@ -39,6 +40,10 @@ public class Main extends JavaPlugin implements Listener {
     private List<String> lockAction = new ArrayList<>();
     @Getter
     private List<String> unlockAction = new ArrayList<>();
+
+    @Getter
+    @Setter
+    private boolean residence = false;
 
     @Override
     public void onEnable() {
@@ -49,6 +54,7 @@ public class Main extends JavaPlugin implements Listener {
 
         // 注册 Event
         Bukkit.getPluginManager().registerEvents(new LockEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new GuiEvent(), this);
 
         // 注册 Command
         getCommand("lock").setExecutor(new LockCommand());
