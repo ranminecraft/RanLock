@@ -1,0 +1,7 @@
+lock-block:
+  - CHEST
+  - TRAPPED_CHEST
+  - BARREL
+  - FURNACE
+  - BREWING_STAND
+  - BLAST_FURNACE

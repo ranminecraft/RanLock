@@ -1,0 +1,33 @@
+name: RanLock
+main: cc.ranmc.Main
+description: '桃花源定制24k纯钛合金超级无敌终终终终极版的锁箱插件'
+website: https://www.ranmc.cc/
+author: Ranica
+version: 1.0
+api-version: 1.19
+
+permissions: 
+  lock.user:
+    default: true
+    description: 'user only'
+
+  lock.admin:
+    default: op
+    description: 'admin only'
+
+commands:
+  lock:
+    description: lock
+    usage: /<command>
+
+  unlock:
+    description: unlock
+    usage: /<command>
+
+  trust:
+    description: trust
+    usage: /<command>
+
+  untrust:
+    description: untrust
+    usage: /<command>
