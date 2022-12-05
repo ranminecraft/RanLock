@@ -45,6 +45,20 @@ public class GuiEvent implements Listener {
                 Gui.openSecond(player);
                 return;
             }
+
+            // 上锁
+            if (event.getRawSlot() == 47) {
+                player.chat("/lock");
+                player.closeInventory();
+                return;
+            }
+
+            // 解锁
+            if (event.getRawSlot() == 51) {
+                player.chat("/unlock");
+                player.closeInventory();
+                return;
+            }
         }
 
         if (event.getView().getTitle().contains(Colorful.valueOf("&e&l锁箱管理丨添加玩家"))) {
