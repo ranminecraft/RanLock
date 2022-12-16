@@ -20,14 +20,11 @@ public class GuiEvent implements Listener {
 
         Player player = (Player) event.getWhoClicked();
         ItemStack clicked = event.getCurrentItem();
-        if (clicked == null) {
-            return;
-        }
 
         if (event.getView().getTitle().contains(Colorful.valueOf("&e&l锁箱管理丨白名单"))) {
             // 取消点击
             event.setCancelled(true);
-
+            if (clicked == null) return;
             // 关闭菜单
             if (event.getRawSlot() < 45) {
                 player.chat("/untrust " + ChatColor.stripColor(clicked.getItemMeta().getDisplayName()));
