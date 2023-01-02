@@ -31,6 +31,8 @@ public class LockEvent implements Listener {
         if (event.isCancelled()) return;
         Block block = event.getBlock();
         Player player = event.getPlayer();
+        if (plugin.getAutoYaml().getStringList("off").contains(player.getName())) return;
+        if (!plugin.getConfig().getStringList("enable-world").contains(block.getWorld().getName())) return;
         if (plugin.getConfig().getStringList("lock-block").contains(block.getType().toString())) {
             plugin.getLockMap().put(DataUtil.getStrByLoc(block.getLocation()), player.getName());
             player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("place")));
@@ -64,6 +66,10 @@ public class LockEvent implements Listener {
             if (plugin.getLockAction().contains(player.getName())) {
                 event.setCancelled(true);
                 plugin.getLockAction().remove(player.getName());
+                if (!plugin.getConfig().getStringList("enable-world").contains(block.getWorld().getName())) {
+                    player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("disabled-world")));
+                    return;
+                }
                 if (!plugin.getConfig().getStringList("lock-block").contains(block.getType().toString())) {
                     player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("cant-lock")));
                     return;
@@ -90,7 +96,6 @@ public class LockEvent implements Listener {
         }
         plugin.getUnlockAction().remove(player.getName());
         plugin.getLockAction().remove(player.getName());
-
     }
 
     @EventHandler

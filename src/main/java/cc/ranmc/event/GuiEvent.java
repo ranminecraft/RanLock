@@ -38,7 +38,7 @@ public class GuiEvent implements Listener {
             }
 
             // 添加白名单
-            if (event.getRawSlot() == 49) {
+            if (event.getRawSlot() == 51) {
                 Gui.openSecond(player);
                 return;
             }
@@ -51,8 +51,15 @@ public class GuiEvent implements Listener {
             }
 
             // 解锁
-            if (event.getRawSlot() == 51) {
+            if (event.getRawSlot() == 48) {
                 player.chat("/unlock");
+                player.closeInventory();
+                return;
+            }
+
+            // 自动锁定
+            if (event.getRawSlot() == 50) {
+                player.chat("/lockauto");
                 player.closeInventory();
                 return;
             }

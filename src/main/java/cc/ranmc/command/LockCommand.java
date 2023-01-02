@@ -70,6 +70,23 @@ public class LockCommand implements CommandExecutor {
         }
 
         /**
+         * 自动上锁开关
+         */
+        if (cmd.getName().equalsIgnoreCase("lockauto") && args.length == 0) {
+            List<String> list = plugin.getAutoYaml().getStringList("off");
+            if (list.contains(player.getName())) {
+                list.remove(player.getName());
+                player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("auto-lock-on")));
+            } else {
+                list.add(player.getName());
+                player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("auto-lock-off")));
+            }
+            plugin.getAutoYaml().set("off", list);
+            LoadTask.end();
+            return true;
+        }
+
+        /**
          * 上锁
          */
         if (cmd.getName().equalsIgnoreCase("lock") && args.length == 0) {

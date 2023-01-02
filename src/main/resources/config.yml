@@ -5,3 +5,5 @@ lock-block:
   - FURNACE
   - BREWING_STAND
   - BLAST_FURNACE
+enable-world:
+  - world

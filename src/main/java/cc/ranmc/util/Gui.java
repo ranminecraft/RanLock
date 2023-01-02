@@ -19,8 +19,9 @@ public class Gui {
             inventorySize++;
         }
         inventory.setItem(47, ItemBuilder.create(Material.NETHERITE_SCRAP, "&b上锁", "&e对容器进行上锁"));
-        inventory.setItem(51, ItemBuilder.create(Material.SHEARS, "&b解锁", "&e对容器进行解锁"));
-        inventory.setItem(49, ItemBuilder.create(Material.CHEST, "&b添加玩家", "&e不要分享权限给陌生人", "&e否则造成损失后果自负"));
+        inventory.setItem(48, ItemBuilder.create(Material.SHEARS, "&b解锁", "&e对容器进行解锁"));
+        inventory.setItem(51, ItemBuilder.create(Material.CHEST, "&b添加玩家", "&e不要分享权限给陌生人", "&e否则造成损失后果自负"));
+        inventory.setItem(50, ItemBuilder.create(Material.REDSTONE, "&b自动锁定", "&e开关放置后自动锁箱"));
         ItemStack closeItem = ItemBuilder.create(Material.BARRIER, "&b关闭菜单");
         inventory.setItem(45, closeItem);
         inventory.setItem(53, closeItem);

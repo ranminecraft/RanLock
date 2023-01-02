@@ -8,6 +8,7 @@ import cc.ranmc.util.LoadTask;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,7 +29,7 @@ public class Main extends JavaPlugin implements Listener {
      */
     @Getter
     @Setter
-    private YamlConfiguration lockYaml, trustYaml, langYaml;
+    private YamlConfiguration lockYaml, trustYaml, langYaml, autoYaml;
     @Getter
     @Setter
     private HashMap<String, String> lockMap;
@@ -57,10 +58,12 @@ public class Main extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(new GuiEvent(), this);
 
         // 注册 Command
-        getCommand("lock").setExecutor(new LockCommand());
-        getCommand("unlock").setExecutor(new LockCommand());
-        getCommand("trust").setExecutor(new LockCommand());
-        getCommand("untrust").setExecutor(new LockCommand());
+        CommandExecutor commandExecutor = new LockCommand();
+        getCommand("lock").setExecutor(commandExecutor);
+        getCommand("unlock").setExecutor(commandExecutor);
+        getCommand("trust").setExecutor(commandExecutor);
+        getCommand("untrust").setExecutor(commandExecutor);
+        getCommand("lockauto").setExecutor(commandExecutor);
 
         super.onEnable();
     }

@@ -13,7 +13,7 @@ import java.util.HashMap;
  */
 public class LoadTask {
 
-    private static File lockFile, trustFile, langFile;
+    private static File lockFile, trustFile, langFile, autoFile;
     private static Main plugin = Main.getInstance();
 
     public static void start() {
@@ -29,13 +29,17 @@ public class LoadTask {
         }
         plugin.reloadConfig();
 
+        autoFile = new File(plugin.getDataFolder(), "auto.yml");
+        if (!autoFile.exists()) plugin.saveResource("auto.yml", true);
+        plugin.setAutoYaml(YamlConfiguration.loadConfiguration(autoFile));
+
         lockFile = new File(plugin.getDataFolder(), "lock.yml");
         if (!lockFile.exists()) plugin.saveResource("lock.yml", true);
         plugin.setLockYaml(YamlConfiguration.loadConfiguration(lockFile));
 
         plugin.setLockMap(new HashMap());
         for (String key : plugin.getLockYaml().getKeys(false)) {
-            plugin.getLockMap().put(key, plugin.getLockYaml().get(key).toString());
+            if (!key.contains("zy") && !key.contains("world_the_end") && !key.contains("world_nether")) plugin.getLockMap().put(key, plugin.getLockYaml().get(key).toString());
         }
 
         trustFile = new File(plugin.getDataFolder(), "trust.yml");
@@ -62,6 +66,7 @@ public class LoadTask {
         try {
             yaml.save(lockFile);
             plugin.getTrustYaml().save(trustFile);
+            plugin.getAutoYaml().save(autoFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
