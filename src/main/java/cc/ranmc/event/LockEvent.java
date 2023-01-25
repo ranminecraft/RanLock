@@ -21,6 +21,7 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.StructureGrowEvent;
+import org.bukkit.inventory.EquipmentSlot;
 
 public class LockEvent implements Listener {
 
@@ -91,8 +92,10 @@ public class LockEvent implements Listener {
                 player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("break")));
             }
         } else {
-            event.setCancelled(true);
-            player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("cant-open")).replace("%owner%", owner));
+            if (EquipmentSlot.HAND.equals(event.getHand())) {
+                event.setCancelled(true);
+                player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("cant-open")).replace("%owner%", owner));
+            }
         }
         plugin.getUnlockAction().remove(player.getName());
         plugin.getLockAction().remove(player.getName());
