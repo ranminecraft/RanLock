@@ -21,7 +21,6 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.StructureGrowEvent;
-import org.bukkit.inventory.EquipmentSlot;
 
 public class LockEvent implements Listener {
 
@@ -93,7 +92,7 @@ public class LockEvent implements Listener {
             }
         } else {
             event.setCancelled(true);
-            if (EquipmentSlot.HAND.equals(event.getHand())) { // 仅在右手交互时进行提示
+            if (event.getAction() == Action.LEFT_CLICK_BLOCK） {
                 player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("cant-open")).replace("%owner%", owner));
             }
         }
