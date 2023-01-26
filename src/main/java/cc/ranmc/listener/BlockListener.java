@@ -1,11 +1,11 @@
-package cc.ranmc.event;
+package cc.ranmc.listener;
 
 import cc.ranmc.Main;
 import cc.ranmc.util.BlockUtil;
 import cc.ranmc.util.Colorful;
 import cc.ranmc.util.DataUtil;
 import cc.ranmc.util.ResCheck;
-import org.bukkit.block.Block;
+import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.HopperMinecart;
@@ -22,14 +22,14 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.StructureGrowEvent;
 
-public class LockEvent implements Listener {
+public class BlockListener implements Listener {
 
     private Main plugin = Main.getInstance();
 
     @EventHandler
     public void onBlockPlaceEvent(BlockPlaceEvent event) {
         if (event.isCancelled()) return;
-        Block block = event.getBlock();
+        org.bukkit.block.Block block = event.getBlock();
         Player player = event.getPlayer();
         if (plugin.getAutoYaml().getStringList("off").contains(player.getName())) return;
         if (!plugin.getConfig().getStringList("enable-world").contains(block.getWorld().getName())) return;
@@ -42,7 +42,7 @@ public class LockEvent implements Listener {
     @EventHandler
     public void onBlockBreakEvent(BlockBreakEvent event) {
         if (event.isCancelled()) return;
-        Block block = event.getBlock();
+        org.bukkit.block.Block block = event.getBlock();
         Player player = event.getPlayer();
         String owner = BlockUtil.getOwner(block);
         if (owner.isEmpty()) return;
@@ -59,7 +59,7 @@ public class LockEvent implements Listener {
     public void onInteract(PlayerInteractEvent event) {
         if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_AIR) return;
         Player player = event.getPlayer();
-        Block block = event.getClickedBlock();
+        org.bukkit.block.Block block = event.getClickedBlock();
         if (block == null) return;
         String owner = BlockUtil.getOwner(block);
         if (owner.isEmpty()) {
@@ -92,7 +92,7 @@ public class LockEvent implements Listener {
             }
         } else {
             event.setCancelled(true);
-            if (event.getAction() == Action.LEFT_CLICK_BLOCK） {
+            if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("cant-open")).replace("%owner%", owner));
             }
         }
@@ -102,7 +102,7 @@ public class LockEvent implements Listener {
 
     @EventHandler
     public void onBlockPistonExtendEvent(BlockPistonExtendEvent event) {
-        for (Block block : event.getBlocks()) {
+        for (org.bukkit.block.Block block : event.getBlocks()) {
             if (BlockUtil.isLock(block)) {
                 event.setCancelled(true);
                 break;
@@ -112,7 +112,7 @@ public class LockEvent implements Listener {
 
     @EventHandler
     public void onBlockPistonRetractEvent(BlockPistonRetractEvent event) {
-        for (Block block : event.getBlocks()) {
+        for (org.bukkit.block.Block block : event.getBlocks()) {
             if (BlockUtil.isLock(block)) {
                 event.setCancelled(true);
                 break;
@@ -142,7 +142,9 @@ public class LockEvent implements Listener {
 
     @EventHandler
     public void onInventoryMoveItemEvent(InventoryMoveItemEvent event) {
-        if (!BlockUtil.isLock(event.getSource().getLocation().getBlock())) return;
+        Location location = event.getSource().getLocation();
+        if (location == null) return;
+        if (!BlockUtil.isLock(location.getBlock())) return;
         if (event.getDestination().getHolder() instanceof HopperMinecart || event.getDestination().getHolder() instanceof org.bukkit.block.Hopper) {
             event.setCancelled(true);
         }

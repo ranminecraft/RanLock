@@ -3,7 +3,7 @@ main: cc.ranmc.Main
 description: '桃花源定制24k纯钛合金超级无敌终终终终极版的锁箱插件'
 website: https://www.ranmc.cc/
 author: Ranica
-version: 1.3
+version: 1.5
 api-version: 1.19
 
 permissions: 

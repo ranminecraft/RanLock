@@ -1,8 +1,8 @@
 package cc.ranmc;
 
 import cc.ranmc.command.LockCommand;
-import cc.ranmc.event.GuiEvent;
-import cc.ranmc.event.LockEvent;
+import cc.ranmc.listener.GuiListener;
+import cc.ranmc.listener.BlockListener;
 import cc.ranmc.util.Colorful;
 import cc.ranmc.util.LoadTask;
 import lombok.Getter;
@@ -54,8 +54,8 @@ public class Main extends JavaPlugin implements Listener {
         LoadTask.start();
 
         // 注册 Event
-        Bukkit.getPluginManager().registerEvents(new LockEvent(), this);
-        Bukkit.getPluginManager().registerEvents(new GuiEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
+        Bukkit.getPluginManager().registerEvents(new GuiListener(), this);
 
         // 注册 Command
         CommandExecutor commandExecutor = new LockCommand();

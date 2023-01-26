@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class Gui {
+public class GuiUtil {
     public static void open(Player player) {
         Inventory inventory = Bukkit.createInventory(null, 54, Colorful.valueOf("&e&l锁箱管理丨白名单"));
         List<String> trustList = Main.getInstance().getTrustYaml().getStringList(player.getName());

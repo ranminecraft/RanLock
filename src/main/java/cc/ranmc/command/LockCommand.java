@@ -2,14 +2,13 @@ package cc.ranmc.command;
 
 import cc.ranmc.Main;
 import cc.ranmc.util.Colorful;
-import cc.ranmc.util.Gui;
+import cc.ranmc.util.GuiUtil;
 import cc.ranmc.util.LoadTask;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class LockCommand implements CommandExecutor {
@@ -65,7 +64,7 @@ public class LockCommand implements CommandExecutor {
          * 菜单
          */
         if (cmd.getName().equalsIgnoreCase("lock") && args.length == 1 && args[0].equals("gui")) {
-            Gui.open(player);
+            GuiUtil.open(player);
             return true;
         }
 

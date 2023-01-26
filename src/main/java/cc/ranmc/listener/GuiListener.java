@@ -1,8 +1,8 @@
-package cc.ranmc.event;
+package cc.ranmc.listener;
 
 import cc.ranmc.Main;
 import cc.ranmc.util.Colorful;
-import cc.ranmc.util.Gui;
+import cc.ranmc.util.GuiUtil;
 import cc.ranmc.util.SignMenuFactory;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 
-public class GuiEvent implements Listener {
+public class GuiListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
 
@@ -39,7 +39,7 @@ public class GuiEvent implements Listener {
 
             // 添加白名单
             if (event.getRawSlot() == 51) {
-                Gui.openSecond(player);
+                GuiUtil.openSecond(player);
                 return;
             }
 
@@ -77,7 +77,7 @@ public class GuiEvent implements Listener {
 
             // 关闭菜单
             if (event.getRawSlot() == 53 || event.getRawSlot() == 45) {
-                Gui.open(player);
+                GuiUtil.open(player);
                 return;
             }
 
