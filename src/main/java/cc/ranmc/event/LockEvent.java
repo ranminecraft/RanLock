@@ -92,7 +92,9 @@ public class LockEvent implements Listener {
             }
         } else {
             event.setCancelled(true);
-            player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("cant-open")).replace("%owner%", owner));
+            if (event.getAction() == Action.LEFT_CLICK_BLOCK） {
+                player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("cant-open")).replace("%owner%", owner));
+            }
         }
         plugin.getUnlockAction().remove(player.getName());
         plugin.getLockAction().remove(player.getName());
