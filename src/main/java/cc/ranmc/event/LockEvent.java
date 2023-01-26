@@ -92,8 +92,8 @@ public class LockEvent implements Listener {
                 player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("break")));
             }
         } else {
-            if (EquipmentSlot.HAND.equals(event.getHand())) {
-                event.setCancelled(true);
+            event.setCancelled(true);
+            if (EquipmentSlot.HAND.equals(event.getHand())) { // 仅在右手交互时进行提示
                 player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("cant-open")).replace("%owner%", owner));
             }
         }
