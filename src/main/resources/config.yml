@@ -1,3 +1,4 @@
+sqlite: false
 lock-block:
   - CHEST
   - TRAPPED_CHEST

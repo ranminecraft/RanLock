@@ -1,6 +1,6 @@
-package cc.ranmc.util;
+package cc.ranmc.lock.util;
 
-import cc.ranmc.Main;
+import cc.ranmc.lock.Main;
 import com.bekvon.bukkit.residence.api.ResidenceApi;
 import com.bekvon.bukkit.residence.protection.ClaimedResidence;
 import org.bukkit.block.Block;

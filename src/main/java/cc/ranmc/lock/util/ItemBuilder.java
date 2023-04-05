@@ -1,14 +1,14 @@
-package cc.ranmc.util;
+package cc.ranmc.lock.util;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class ItemBuilder {
     /**
@@ -20,7 +20,7 @@ public class ItemBuilder {
     public static ItemStack create(Material m, String name) {
         ItemStack item = new ItemStack(m);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(Colorful.valueOf(name));
+        Objects.requireNonNull(meta).setDisplayName(Colorful.valueOf(name));
         item.setItemMeta(meta);
         return item;
     }
@@ -28,7 +28,7 @@ public class ItemBuilder {
     public static ItemStack create(Material m, String name, String... lore) {
         ItemStack item = new ItemStack(m);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(Colorful.valueOf(name));
+        Objects.requireNonNull(meta).setDisplayName(Colorful.valueOf(name));
         List<String> loreList = Arrays.asList(lore);
         for (int i = 0; i < loreList.size(); i++) {
             loreList.set(i, Colorful.valueOf(loreList.get(i)));
@@ -41,7 +41,7 @@ public class ItemBuilder {
     public static ItemStack createSkull(Material m, Player player, String... lore) {
         ItemStack item = new ItemStack(m);
         SkullMeta meta = (SkullMeta) item.getItemMeta();
-        meta.setOwningPlayer(player);
+        Objects.requireNonNull(meta).setOwningPlayer(player);
         meta.setDisplayName(Colorful.valueOf("&b" + player.getName()));
         List<String> loreList = Arrays.asList(lore);
         for (int i = 0; i < loreList.size(); i++) {

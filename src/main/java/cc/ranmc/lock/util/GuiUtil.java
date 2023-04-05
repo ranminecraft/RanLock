@@ -1,6 +1,5 @@
-package cc.ranmc.util;
+package cc.ranmc.lock.util;
 
-import cc.ranmc.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,7 +11,9 @@ import java.util.List;
 public class GuiUtil {
     public static void open(Player player) {
         Inventory inventory = Bukkit.createInventory(null, 54, Colorful.valueOf("&e&l锁箱管理丨白名单"));
-        List<String> trustList = Main.getInstance().getTrustYaml().getStringList(player.getName());
+
+        List<String> trustList = DataUtil.getTrustList(player.getName());
+
         int inventorySize = 0;
         for(String name : trustList) {
             inventory.setItem(inventorySize, ItemBuilder.create(Material.PLAYER_HEAD, "&b" + name, "&e点击取消白名单"));
@@ -30,9 +31,9 @@ public class GuiUtil {
 
     public static void openSecond(Player player) {
         Inventory inventory = Bukkit.createInventory(null, 54, Colorful.valueOf("&e&l锁箱管理丨添加玩家"));
-        List<String> trustList = Main.getInstance().getTrustYaml().getStringList(player.getName());
+        List<String> trustList = DataUtil.getTrustList(player.getName());
         int inventorySize = 0;
-        for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if (!trustList.contains(onlinePlayer.getName()) && onlinePlayer != player) {
                 if (inventorySize < 45) {
                     inventory.setItem(inventorySize, ItemBuilder.createSkull(Material.PLAYER_HEAD, onlinePlayer, "&e点击添加白名单"));

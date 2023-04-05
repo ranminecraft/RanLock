@@ -1,10 +1,11 @@
 name: RanLock
-main: cc.ranmc.Main
+main: cc.ranmc.lock.Main
 description: '桃花源定制24k纯钛合金超级无敌终终终终极版的锁箱插件'
 website: https://www.ranmc.cc/
 author: Ranica
-version: 1.5
+version: 2.0
 api-version: 1.19
+depend: [Residence]
 
 permissions: 
   lock.user:

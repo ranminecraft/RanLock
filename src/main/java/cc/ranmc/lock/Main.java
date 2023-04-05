@@ -1,10 +1,11 @@
-package cc.ranmc;
+package cc.ranmc.lock;
 
-import cc.ranmc.command.LockCommand;
-import cc.ranmc.listener.GuiListener;
-import cc.ranmc.listener.BlockListener;
-import cc.ranmc.util.Colorful;
-import cc.ranmc.util.LoadTask;
+import cc.ranmc.lock.command.LockCommand;
+import cc.ranmc.lock.listener.GuiListener;
+import cc.ranmc.lock.listener.BlockListener;
+import cc.ranmc.lock.sqlite.SQLite;
+import cc.ranmc.lock.util.Colorful;
+import cc.ranmc.lock.util.LoadTask;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -16,6 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class Main extends JavaPlugin implements Listener {
 
@@ -38,13 +40,19 @@ public class Main extends JavaPlugin implements Listener {
     private static Main instance;
 
     @Getter
-    private List<String> lockAction = new ArrayList<>();
+    private final List<String> lockAction = new ArrayList<>();
     @Getter
-    private List<String> unlockAction = new ArrayList<>();
+    private final List<String> unlockAction = new ArrayList<>();
 
     @Getter
     @Setter
     private boolean residence = false;
+    @Getter
+    @Setter
+    private SQLite sqLite;
+    @Getter
+    @Setter
+    private boolean enableSqlite = false;
 
     @Override
     public void onEnable() {
@@ -59,21 +67,21 @@ public class Main extends JavaPlugin implements Listener {
 
         // 注册 Command
         CommandExecutor commandExecutor = new LockCommand();
-        getCommand("lock").setExecutor(commandExecutor);
-        getCommand("unlock").setExecutor(commandExecutor);
-        getCommand("trust").setExecutor(commandExecutor);
-        getCommand("untrust").setExecutor(commandExecutor);
-        getCommand("lockauto").setExecutor(commandExecutor);
+        Objects.requireNonNull(getCommand("lock")).setExecutor(commandExecutor);
+        Objects.requireNonNull(getCommand("unlock")).setExecutor(commandExecutor);
+        Objects.requireNonNull(getCommand("trust")).setExecutor(commandExecutor);
+        Objects.requireNonNull(getCommand("untrust")).setExecutor(commandExecutor);
+        Objects.requireNonNull(getCommand("lockauto")).setExecutor(commandExecutor);
 
         super.onEnable();
     }
 
     @Override
     public void onDisable() {
-
         // 保存数据
         LoadTask.end();
-
+        //关闭数据库
+        if (sqLite != null) sqLite.close();
         super.onDisable();
     }
 }

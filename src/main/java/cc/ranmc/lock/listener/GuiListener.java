@@ -1,9 +1,9 @@
-package cc.ranmc.listener;
+package cc.ranmc.lock.listener;
 
-import cc.ranmc.Main;
-import cc.ranmc.util.Colorful;
-import cc.ranmc.util.GuiUtil;
-import cc.ranmc.util.SignMenuFactory;
+import cc.ranmc.lock.Main;
+import cc.ranmc.lock.util.SignMenuFactory;
+import cc.ranmc.lock.util.Colorful;
+import cc.ranmc.lock.util.GuiUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -13,6 +13,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class GuiListener implements Listener {
     @EventHandler
@@ -27,7 +28,7 @@ public class GuiListener implements Listener {
             if (clicked == null) return;
             // 关闭菜单
             if (event.getRawSlot() < 45) {
-                player.chat("/untrust " + ChatColor.stripColor(clicked.getItemMeta().getDisplayName()));
+                player.chat("/untrust " + ChatColor.stripColor(Objects.requireNonNull(clicked.getItemMeta()).getDisplayName()));
                 player.closeInventory();
             }
 
@@ -71,7 +72,7 @@ public class GuiListener implements Listener {
 
             // 关闭菜单
             if (event.getRawSlot() < 45) {
-                player.chat("/trust " + ChatColor.stripColor(clicked.getItemMeta().getDisplayName()));
+                player.chat("/trust " + ChatColor.stripColor(Objects.requireNonNull(Objects.requireNonNull(clicked).getItemMeta()).getDisplayName()));
                 player.closeInventory();
             }
 
@@ -89,7 +90,6 @@ public class GuiListener implements Listener {
                             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> p.chat("/trust " + strings[0]));
                             return true;
                         }).open(player);
-                return;
             }
         }
     }

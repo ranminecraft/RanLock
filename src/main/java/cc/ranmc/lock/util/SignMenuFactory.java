@@ -1,6 +1,6 @@
-package cc.ranmc.util;
+package cc.ranmc.lock.util;
 
-import cc.ranmc.Main;
+import cc.ranmc.lock.Main;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -29,7 +29,7 @@ public final class SignMenuFactory {
     private static final String NBT_FORMAT = "{\"text\":\"%s\"}";
     private static final String NBT_BLOCK_ID = "minecraft:sign";
 
-    private Main plugin = Main.getInstance();
+    private final Main plugin = Main.getInstance();
 
     private final Map<Player, Menu> inputs;
 
@@ -147,10 +147,6 @@ public final class SignMenuFactory {
             if (player.isOnline()) {
                 player.closeInventory();
             }
-        }
-
-        public void close(Player player) {
-            close(player, false);
         }
 
         private String color(String input) {

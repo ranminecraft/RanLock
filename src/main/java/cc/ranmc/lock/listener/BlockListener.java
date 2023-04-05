@@ -1,10 +1,10 @@
-package cc.ranmc.listener;
+package cc.ranmc.lock.listener;
 
-import cc.ranmc.Main;
-import cc.ranmc.util.BlockUtil;
-import cc.ranmc.util.Colorful;
-import cc.ranmc.util.DataUtil;
-import cc.ranmc.util.ResCheck;
+import cc.ranmc.lock.Main;
+import cc.ranmc.lock.util.BlockUtil;
+import cc.ranmc.lock.util.Colorful;
+import cc.ranmc.lock.util.DataUtil;
+import cc.ranmc.lock.util.ResCheck;
 import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
@@ -24,17 +24,19 @@ import org.bukkit.event.world.StructureGrowEvent;
 
 public class BlockListener implements Listener {
 
-    private Main plugin = Main.getInstance();
+    private final Main plugin = Main.getInstance();
 
     @EventHandler
     public void onBlockPlaceEvent(BlockPlaceEvent event) {
         if (event.isCancelled()) return;
         org.bukkit.block.Block block = event.getBlock();
         Player player = event.getPlayer();
-        if (plugin.getAutoYaml().getStringList("off").contains(player.getName())) return;
+        if (plugin.isEnableSqlite()) {
+            if (!plugin.getSqLite().selectAuto(player)) return;
+        } else if (plugin.getAutoYaml().getStringList("off").contains(player.getName())) return;
         if (!plugin.getConfig().getStringList("enable-world").contains(block.getWorld().getName())) return;
         if (plugin.getConfig().getStringList("lock-block").contains(block.getType().toString())) {
-            plugin.getLockMap().put(DataUtil.getStrByLoc(block.getLocation()), player.getName());
+            DataUtil.lock(player.getName(), block.getLocation());
             player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("place")));
         }
     }
@@ -45,9 +47,9 @@ public class BlockListener implements Listener {
         org.bukkit.block.Block block = event.getBlock();
         Player player = event.getPlayer();
         String owner = BlockUtil.getOwner(block);
-        if (owner.isEmpty()) return;
+        if (owner == null) return;
         if (player.getName().equalsIgnoreCase(BlockUtil.getOwner(block)) || plugin.getTrustYaml().getStringList(owner).contains(player.getName()) || player.hasPermission("lock.admin")) {
-            plugin.getLockMap().remove(DataUtil.getStrByLoc(block.getLocation()));
+            DataUtil.unlock(block.getLocation());
             player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("break")));
         } else {
             event.setCancelled(true);
@@ -62,7 +64,7 @@ public class BlockListener implements Listener {
         org.bukkit.block.Block block = event.getClickedBlock();
         if (block == null) return;
         String owner = BlockUtil.getOwner(block);
-        if (owner.isEmpty()) {
+        if (owner == null) {
             if (plugin.getLockAction().contains(player.getName())) {
                 event.setCancelled(true);
                 plugin.getLockAction().remove(player.getName());
@@ -79,15 +81,15 @@ public class BlockListener implements Listener {
                     event.setCancelled(true);
                     return;
                 }
-                plugin.getLockMap().put(DataUtil.getStrByLoc(block.getLocation()), player.getName());
+                DataUtil.lock(player.getName(), block.getLocation());
                 player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("place")));
             }
             return;
         }
-        if (player.getName().equalsIgnoreCase(owner) || plugin.getTrustYaml().getStringList(owner).contains(player.getName()) || player.hasPermission("lock.admin")) {
+        if (player.getName().equalsIgnoreCase(owner) || DataUtil.getTrustList(owner).contains(player.getName()) || player.hasPermission("lock.admin")) {
             if (plugin.getUnlockAction().contains(player.getName())) {
                 event.setCancelled(true);
-                plugin.getLockMap().remove(DataUtil.getStrByLoc(block.getLocation()));
+                DataUtil.unlock(block.getLocation());
                 player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("break")));
             }
         } else {
