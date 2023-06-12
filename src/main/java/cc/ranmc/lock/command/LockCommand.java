@@ -28,7 +28,7 @@ public class LockCommand implements CommandExecutor {
         if (cmd.getName().equalsIgnoreCase("lock") && args.length == 1) {
             if (sender.hasPermission("lock.admin")) {
                 if (args[0].equalsIgnoreCase("reload")) {
-                    plugin.getSqLite().close();
+                    if (plugin.getSqLite() != null) plugin.getSqLite().close();
                     LoadTask.start();
                     sender.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("reload")));
                     return true;
@@ -39,7 +39,10 @@ public class LockCommand implements CommandExecutor {
                     return true;
                 }
                 if (args[0].equalsIgnoreCase("sync")) {
-                    if (!plugin.isEnableSqlite()) return true;
+                    if (!plugin.isEnableSqlite()) {
+                        sender.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("sql-not-enable")));
+                        return true;
+                    }
                     sender.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("syncing")));
                     Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, ()-> {
                         int count = 0;

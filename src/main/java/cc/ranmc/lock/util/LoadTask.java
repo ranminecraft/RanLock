@@ -36,7 +36,8 @@ public class LoadTask {
         if (!autoFile.exists()) plugin.saveResource("auto.yml", true);
         plugin.setAutoYaml(YamlConfiguration.loadConfiguration(autoFile));
 
-        if (plugin.getConfig().getBoolean("sqlite", false)) {
+        plugin.setEnableSqlite(plugin.getConfig().getBoolean("sqlite", false));
+        if (plugin.isEnableSqlite()) {
             plugin.setSqLite(new SQLite(plugin.getDataFolder().getPath() + "/data.db").createTable());
             plugin.setEnableSqlite(true);
         } else {
@@ -46,7 +47,7 @@ public class LoadTask {
         if (!lockFile.exists()) plugin.saveResource("lock.yml", true);
         plugin.setLockYaml(YamlConfiguration.loadConfiguration(lockFile));
 
-        plugin.setLockMap(new HashMap());
+        plugin.setLockMap(new HashMap<>());
         for (String key : plugin.getLockYaml().getKeys(false)) {
             plugin.getLockMap().put(key, plugin.getLockYaml().get(key).toString());
         }

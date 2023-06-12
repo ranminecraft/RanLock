@@ -6,6 +6,7 @@ import cc.ranmc.lock.util.Colorful;
 import cc.ranmc.lock.util.DataUtil;
 import cc.ranmc.lock.util.ResCheck;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.HopperMinecart;
@@ -29,12 +30,12 @@ public class BlockListener implements Listener {
     @EventHandler
     public void onBlockPlaceEvent(BlockPlaceEvent event) {
         if (event.isCancelled()) return;
-        org.bukkit.block.Block block = event.getBlock();
+        Block block = event.getBlock();
+        if (!plugin.getConfig().getStringList("enable-world").contains(block.getWorld().getName())) return;
         Player player = event.getPlayer();
         if (plugin.isEnableSqlite()) {
             if (!plugin.getSqLite().selectAuto(player)) return;
         } else if (plugin.getAutoYaml().getStringList("off").contains(player.getName())) return;
-        if (!plugin.getConfig().getStringList("enable-world").contains(block.getWorld().getName())) return;
         if (plugin.getConfig().getStringList("lock-block").contains(block.getType().toString())) {
             DataUtil.lock(player.getName(), block.getLocation());
             player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("place")));
@@ -44,7 +45,8 @@ public class BlockListener implements Listener {
     @EventHandler
     public void onBlockBreakEvent(BlockBreakEvent event) {
         if (event.isCancelled()) return;
-        org.bukkit.block.Block block = event.getBlock();
+        Block block = event.getBlock();
+        if (!plugin.getConfig().getStringList("enable-world").contains(block.getWorld().getName())) return;
         Player player = event.getPlayer();
         String owner = BlockUtil.getOwner(block);
         if (owner == null) return;
@@ -61,7 +63,7 @@ public class BlockListener implements Listener {
     public void onInteract(PlayerInteractEvent event) {
         if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_AIR) return;
         Player player = event.getPlayer();
-        org.bukkit.block.Block block = event.getClickedBlock();
+        Block block = event.getClickedBlock();
         if (block == null) return;
         String owner = BlockUtil.getOwner(block);
         if (owner == null) {
@@ -104,7 +106,8 @@ public class BlockListener implements Listener {
 
     @EventHandler
     public void onBlockPistonExtendEvent(BlockPistonExtendEvent event) {
-        for (org.bukkit.block.Block block : event.getBlocks()) {
+        if (!plugin.getConfig().getStringList("enable-world").contains(event.getBlock().getWorld().getName())) return;
+        for (Block block : event.getBlocks()) {
             if (BlockUtil.isLock(block)) {
                 event.setCancelled(true);
                 break;
@@ -114,7 +117,8 @@ public class BlockListener implements Listener {
 
     @EventHandler
     public void onBlockPistonRetractEvent(BlockPistonRetractEvent event) {
-        for (org.bukkit.block.Block block : event.getBlocks()) {
+        if (!plugin.getConfig().getStringList("enable-world").contains(event.getBlock().getWorld().getName())) return;
+        for (Block block : event.getBlocks()) {
             if (BlockUtil.isLock(block)) {
                 event.setCancelled(true);
                 break;
@@ -124,6 +128,7 @@ public class BlockListener implements Listener {
 
     @EventHandler
     public void onStructureGrowEvent(StructureGrowEvent event) {
+        if (!plugin.getConfig().getStringList("enable-world").contains(event.getLocation().getWorld().getName())) return;
         for (BlockState blockState : event.getBlocks()) {
             if (BlockUtil.isLock(blockState.getBlock())) {
                 event.setCancelled(true);
@@ -134,11 +139,16 @@ public class BlockListener implements Listener {
 
     @EventHandler
     public void onBlockRedstoneChange(BlockRedstoneEvent event) {
-        if (BlockUtil.isLock(event.getBlock())) event.setNewCurrent(event.getOldCurrent());
+        Block block = event.getBlock();
+        if (!plugin.getConfig().getStringList("enable-world").contains(block.getWorld().getName())) return;
+        if (plugin.getConfig().getStringList("lock-block").contains(block.getType().toString())) {
+            event.setNewCurrent(event.getOldCurrent());
+        }
     }
 
     @EventHandler
     public void onMobChangeBlock(EntityChangeBlockEvent event) {
+        if (!plugin.getConfig().getStringList("enable-world").contains(event.getBlock().getWorld().getName())) return;
         if (BlockUtil.isLock(event.getBlock())) event.setCancelled(true);
     }
 

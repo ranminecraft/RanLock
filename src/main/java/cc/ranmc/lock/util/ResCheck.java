@@ -23,7 +23,7 @@ public class ResCheck {
             if (permList.contains(player.getName())) {
                 perm = claimedResidence.getPermissions().getPlayerFlags(player.getName()).get("place");
             }
-            if ((perm == null || !perm) && !claimedResidence.getOwner().equalsIgnoreCase(player.getName())) return false;
+            return (perm != null && perm) || claimedResidence.getOwner().equalsIgnoreCase(player.getName());
         }
         return true;
     }
@@ -35,7 +35,7 @@ public class ResCheck {
      */
     public static String removeBrackets(String text) {
         List<String> list = new ArrayList<>();
-        Pattern p = Pattern.compile("(\\[[^\\]]*\\])");
+        Pattern p = Pattern.compile("(\\[[^]]*])");
         Matcher m = p.matcher(text);
         while (m.find()) {
             list.add(m.group().substring(1, m.group().length() - 1));
