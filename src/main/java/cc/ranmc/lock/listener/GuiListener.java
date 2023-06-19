@@ -1,9 +1,9 @@
 package cc.ranmc.lock.listener;
 
 import cc.ranmc.lock.Main;
-import cc.ranmc.lock.util.SignMenuFactory;
 import cc.ranmc.lock.util.Colorful;
 import cc.ranmc.lock.util.GuiUtil;
+import cc.ranmc.sign.SignApi;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,10 +12,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.Objects;
 
-public class GuiListener implements Listener {
+public class GUIListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
 
@@ -84,8 +83,7 @@ public class GuiListener implements Listener {
 
             // 添加白名单
             if (event.getRawSlot() == 49) {
-                new SignMenuFactory().newMenu(Arrays.asList("此行输入玩家ID","","",""))
-                        .reopenIfFail(true)
+                SignApi.newMenu("此行输入玩家ID")
                         .response((p, strings) -> {
                             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> p.chat("/trust " + strings[0]));
                             return true;

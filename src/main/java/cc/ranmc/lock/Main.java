@@ -1,7 +1,7 @@
 package cc.ranmc.lock;
 
 import cc.ranmc.lock.command.LockCommand;
-import cc.ranmc.lock.listener.GuiListener;
+import cc.ranmc.lock.listener.GUIListener;
 import cc.ranmc.lock.listener.BlockListener;
 import cc.ranmc.lock.sqlite.SQLite;
 import cc.ranmc.lock.util.Colorful;
@@ -63,7 +63,7 @@ public class Main extends JavaPlugin implements Listener {
 
         // 注册 Event
         Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
-        Bukkit.getPluginManager().registerEvents(new GuiListener(), this);
+        Bukkit.getPluginManager().registerEvents(new GUIListener(), this);
 
         // 注册 Command
         CommandExecutor commandExecutor = new LockCommand();

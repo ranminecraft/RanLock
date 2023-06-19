@@ -115,6 +115,14 @@ public class SQLite {
     }
 
     /**
+     * 获取锁箱子列表
+     * @return 锁箱记录
+     */
+    public List<Map<String, String>> selectLockList() {
+        return selectList("SELECT * FROM LOCK");
+    }
+
+    /**
      * 获取当前方块拥有者
      * @param location 位置
      * @return 拥有者
