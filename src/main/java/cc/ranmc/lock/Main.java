@@ -5,6 +5,7 @@ import cc.ranmc.lock.listener.GUIListener;
 import cc.ranmc.lock.listener.BlockListener;
 import cc.ranmc.lock.sqlite.SQLite;
 import cc.ranmc.lock.util.Colorful;
+import cc.ranmc.lock.util.FoliaCheckUtil;
 import cc.ranmc.lock.util.LoadTask;
 import lombok.Getter;
 import lombok.Setter;
@@ -53,6 +54,8 @@ public class Main extends JavaPlugin implements Listener {
     @Getter
     @Setter
     private boolean enableSqlite = false;
+    @Getter
+    private final boolean folia = FoliaCheckUtil.isFolia();
 
     @Override
     public void onEnable() {

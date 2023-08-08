@@ -85,7 +85,12 @@ public class GUIListener implements Listener {
             if (event.getRawSlot() == 49) {
                 SignApi.newMenu("此行输入玩家ID")
                         .response((p, strings) -> {
-                            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> p.chat("/trust " + strings[0]));
+                            if (Main.getInstance().isFolia()) {
+                                p.chat("/trust " + strings[0]);
+                            } else {
+                                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(),
+                                        () -> p.chat("/trust " + strings[0]));
+                            }
                             return true;
                         }).open(player);
             }

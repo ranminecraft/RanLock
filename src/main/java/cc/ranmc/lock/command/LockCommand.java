@@ -44,23 +44,44 @@ public class LockCommand implements CommandExecutor {
                         return true;
                     }
                     sender.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("syncing")));
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, ()-> {
-                        int count = 0;
-                        Map<String,String> lockMap = plugin.getLockMap();
-                        for (String key : lockMap.keySet()) {
-                            plugin.getSqLite().insertLock(lockMap.get(key), DataUtil.getLocByStr(key));
-                            count++;
-                        }
-                        YamlConfiguration trustYml = plugin.getTrustYaml();
-                        for (String key : trustYml.getKeys(false)) {
-                            List<String> list = trustYml.getStringList(key);
-                            for (String name : list) {
-                                plugin.getSqLite().insertTrust(key, name);
+
+                    if (plugin.isFolia()) {
+                        Bukkit.getServer().getAsyncScheduler().runNow(plugin, scheduledTask -> {
+                            int count = 0;
+                            Map<String,String> lockMap = plugin.getLockMap();
+                            for (String key : lockMap.keySet()) {
+                                plugin.getSqLite().insertLock(lockMap.get(key), DataUtil.getLocByStr(key));
                                 count++;
                             }
-                        }
-                        sender.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("sync").replace("%count%", String.valueOf(count))));
-                    });
+                            YamlConfiguration trustYml = plugin.getTrustYaml();
+                            for (String key : trustYml.getKeys(false)) {
+                                List<String> list = trustYml.getStringList(key);
+                                for (String name : list) {
+                                    plugin.getSqLite().insertTrust(key, name);
+                                    count++;
+                                }
+                            }
+                            sender.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("sync").replace("%count%", String.valueOf(count))));
+                        });
+                    } else {
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, ()-> {
+                            int count = 0;
+                            Map<String,String> lockMap = plugin.getLockMap();
+                            for (String key : lockMap.keySet()) {
+                                plugin.getSqLite().insertLock(lockMap.get(key), DataUtil.getLocByStr(key));
+                                count++;
+                            }
+                            YamlConfiguration trustYml = plugin.getTrustYaml();
+                            for (String key : trustYml.getKeys(false)) {
+                                List<String> list = trustYml.getStringList(key);
+                                for (String name : list) {
+                                    plugin.getSqLite().insertTrust(key, name);
+                                    count++;
+                                }
+                            }
+                            sender.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("sync").replace("%count%", String.valueOf(count))));
+                        });
+                    }
                     return true;
                 }
             }
