@@ -1,11 +1,10 @@
 package cc.ranmc.lock.listener;
 
-import cc.ranmc.lock.Main;
 import cc.ranmc.lock.util.Colorful;
 import cc.ranmc.lock.util.GuiUtil;
+import cc.ranmc.lock.util.ActionUtil;
 import cc.ranmc.sign.SignApi;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,7 +26,7 @@ public class GUIListener implements Listener {
             if (clicked == null) return;
             // 关闭菜单
             if (event.getRawSlot() < 45) {
-                player.chat("/untrust " + ChatColor.stripColor(Objects.requireNonNull(clicked.getItemMeta()).getDisplayName()));
+                ActionUtil.untrust(player, ChatColor.stripColor(Objects.requireNonNull(clicked.getItemMeta()).getDisplayName()));
                 player.closeInventory();
             }
 
@@ -45,21 +44,21 @@ public class GUIListener implements Listener {
 
             // 上锁
             if (event.getRawSlot() == 47) {
-                player.chat("/lock");
+                ActionUtil.lock(player);
                 player.closeInventory();
                 return;
             }
 
             // 解锁
             if (event.getRawSlot() == 48) {
-                player.chat("/unlock");
+                ActionUtil.unlock(player);
                 player.closeInventory();
                 return;
             }
 
             // 自动锁定
             if (event.getRawSlot() == 50) {
-                player.chat("/lockauto");
+                ActionUtil.lockauto(player);
                 player.closeInventory();
                 return;
             }
@@ -71,7 +70,7 @@ public class GUIListener implements Listener {
 
             // 关闭菜单
             if (event.getRawSlot() < 45) {
-                player.chat("/trust " + ChatColor.stripColor(Objects.requireNonNull(Objects.requireNonNull(clicked).getItemMeta()).getDisplayName()));
+                ActionUtil.trust(player, ChatColor.stripColor(Objects.requireNonNull(Objects.requireNonNull(clicked).getItemMeta()).getDisplayName()));
                 player.closeInventory();
             }
 
@@ -85,12 +84,7 @@ public class GUIListener implements Listener {
             if (event.getRawSlot() == 49) {
                 SignApi.newMenu("此行输入玩家ID")
                         .response((p, strings) -> {
-                            if (Main.getInstance().isFolia()) {
-                                p.chat("/trust " + strings[0]);
-                            } else {
-                                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(),
-                                        () -> p.chat("/trust " + strings[0]));
-                            }
+                            ActionUtil.trust(p, strings[0]);
                             return true;
                         }).open(player);
             }

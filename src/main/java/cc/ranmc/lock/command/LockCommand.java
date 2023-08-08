@@ -5,6 +5,7 @@ import cc.ranmc.lock.util.Colorful;
 import cc.ranmc.lock.util.DataUtil;
 import cc.ranmc.lock.util.GuiUtil;
 import cc.ranmc.lock.util.LoadTask;
+import cc.ranmc.lock.util.ActionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -112,26 +113,7 @@ public class LockCommand implements CommandExecutor {
          * 自动上锁开关
          */
         if (cmd.getName().equalsIgnoreCase("lockauto") && args.length == 0) {
-            if (plugin.isEnableSqlite()) {
-                if (plugin.getSqLite().selectAuto(player)) {
-                    player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("auto-lock-off")));
-                } else {
-                    player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("auto-lock-on")));
-                }
-                plugin.getSqLite().updateAuto(player);
-            } else {
-                List<String> list = plugin.getAutoYaml().getStringList("off");
-                if (list.contains(player.getName())) {
-                    list.remove(player.getName());
-                    player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("auto-lock-on")));
-                } else {
-                    list.add(player.getName());
-                    player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("auto-lock-off")));
-                }
-                plugin.getAutoYaml().set("off", list);
-                LoadTask.end();
-            }
-
+            ActionUtil.lockauto(player);
             return true;
         }
 
@@ -139,10 +121,7 @@ public class LockCommand implements CommandExecutor {
          * 上锁
          */
         if (cmd.getName().equalsIgnoreCase("lock") && args.length == 0) {
-            plugin.getUnlockAction().remove(player.getName());
-            plugin.getLockAction().remove(player.getName());
-            plugin.getLockAction().add(player.getName());
-            player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("lock")));
+            ActionUtil.lock(player);
             return true;
         }
 
@@ -150,10 +129,7 @@ public class LockCommand implements CommandExecutor {
          * 解锁
          */
         if (cmd.getName().equalsIgnoreCase("unlock") && args.length == 0) {
-            plugin.getUnlockAction().remove(player.getName());
-            plugin.getLockAction().remove(player.getName());
-            plugin.getUnlockAction().add(player.getName());
-            player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("unlock")));
+            ActionUtil.unlock(player);
             return true;
         }
 
@@ -161,28 +137,7 @@ public class LockCommand implements CommandExecutor {
          * 添加白名单
          */
         if (cmd.getName().equalsIgnoreCase("trust") && args.length == 1) {
-            Player target = Bukkit.getPlayerExact(args[0]);
-            if (target == null) {
-                player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("offline")));
-                return true;
-            }
-            List<String> trustList = DataUtil.getTrustList(player.getName());
-            if (trustList.size() > 44) {
-                player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("full")));
-                return true;
-            }
-            if (target == player || trustList.contains(target.getName())) {
-                player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("exist")));
-                return true;
-            }
-            if (plugin.isEnableSqlite()) {
-                plugin.getSqLite().insertTrust(player.getName(), target.getName());
-            } else {
-                trustList.add(target.getName());
-                plugin.getTrustYaml().set(player.getName(), trustList);
-                LoadTask.end();
-            }
-            player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("trust")).replace("%player%", target.getName()));
+            ActionUtil.trust(player, args[0]);
             return true;
         }
 
@@ -190,19 +145,7 @@ public class LockCommand implements CommandExecutor {
          * 移除白名单
          */
         if (cmd.getName().equalsIgnoreCase("untrust") && args.length == 1) {
-            List<String> trustList = DataUtil.getTrustList(player.getName());
-            if (!trustList.contains(args[0])) {
-                player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("doesnt-exist")));
-                return true;
-            }
-            if (plugin.isEnableSqlite()) {
-                plugin.getSqLite().deleteTrust(player.getName(), args[0]);
-            } else {
-                trustList.remove(args[0]);
-                plugin.getTrustYaml().set(player.getName(), trustList);
-                LoadTask.end();
-            }
-            player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("untrust")).replace("%player%", args[0]));
+            ActionUtil.untrust(player, args[0]);
             return true;
         }
 
