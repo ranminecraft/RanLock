@@ -78,7 +78,7 @@ public class BlockListener implements Listener {
                     player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("cant-lock")));
                     return;
                 }
-                if (!ResCheck.hasPermissom(player, block)) {
+                if (!ResCheck.hasPermission(player, block)) {
                     player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("residence")));
                     event.setCancelled(true);
                     return;

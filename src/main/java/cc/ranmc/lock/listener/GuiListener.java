@@ -67,7 +67,7 @@ public class GUIListener implements Listener {
         if (event.getView().getTitle().contains(Colorful.valueOf("&e&l锁箱管理丨添加玩家"))) {
             // 取消点击
             event.setCancelled(true);
-
+            if (clicked == null) return;
             // 关闭菜单
             if (event.getRawSlot() < 45) {
                 ActionUtil.trust(player, ChatColor.stripColor(Objects.requireNonNull(Objects.requireNonNull(clicked).getItemMeta()).getDisplayName()));

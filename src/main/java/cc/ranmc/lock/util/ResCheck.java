@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 public class ResCheck {
 
-    public static boolean hasPermissom(Player player, Block block) {
+    public static boolean hasPermission(Player player, Block block) {
         if (Main.getInstance().isResidence()) {
             ClaimedResidence claimedResidence = ResidenceApi.getResidenceManager().getByLoc(block.getLocation());
             if (claimedResidence == null) return true;
