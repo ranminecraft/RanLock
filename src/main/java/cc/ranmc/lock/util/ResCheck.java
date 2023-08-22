@@ -21,7 +21,7 @@ public class ResCheck {
             List<String> permList = Arrays.asList(removeBrackets(claimedResidence.getPermissions().listPlayersFlags().replace("§f", "")).split(" "));
             Boolean perm = false;
             if (permList.contains(player.getName())) {
-                perm = claimedResidence.getPermissions().getPlayerFlags(player.getName()).get("place");
+                perm = claimedResidence.getPermissions().getPlayerFlags(player.getName()).get("build");
             }
             return (perm != null && perm) || claimedResidence.getOwner().equalsIgnoreCase(player.getName());
         }
