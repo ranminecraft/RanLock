@@ -112,7 +112,7 @@ public class LockCommand implements CommandExecutor {
         /*
          * 自动上锁开关
          */
-        if (cmd.getName().equalsIgnoreCase("lockauto") && args.length == 0) {
+        if (cmd.getName().equalsIgnoreCase("lockauto")) {
             ActionUtil.lockauto(player);
             return true;
         }
@@ -120,7 +120,7 @@ public class LockCommand implements CommandExecutor {
         /*
          * 上锁
          */
-        if (cmd.getName().equalsIgnoreCase("lock") && args.length == 0) {
+        if (cmd.getName().equalsIgnoreCase("lock")) {
             ActionUtil.lock(player);
             return true;
         }
@@ -128,7 +128,7 @@ public class LockCommand implements CommandExecutor {
         /*
          * 解锁
          */
-        if (cmd.getName().equalsIgnoreCase("unlock") && args.length == 0) {
+        if (cmd.getName().equalsIgnoreCase("unlock")) {
             ActionUtil.unlock(player);
             return true;
         }
