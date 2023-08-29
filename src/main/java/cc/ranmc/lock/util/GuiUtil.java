@@ -11,7 +11,8 @@ import java.util.List;
 public class GuiUtil {
     private static final ItemStack CLOSE = ItemBuilder.create(Material.RED_STAINED_GLASS_PANE, "&b关闭菜单");
     private static final ItemStack RETURN = ItemBuilder.create(Material.RED_STAINED_GLASS_PANE, "&b返回菜单");
-    private static final ItemStack PANE = ItemBuilder.create(Material.GRAY_STAINED_GLASS_PANE, " ");;
+    private static final ItemStack PANE = ItemBuilder.create(Material.GRAY_STAINED_GLASS_PANE, " ");
+
     public static void open(Player player) {
         Inventory inventory = Bukkit.createInventory(null, 54, Colorful.valueOf("&e&l锁箱管理丨白名单"));
 

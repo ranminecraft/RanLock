@@ -65,11 +65,11 @@ public class LoadTask {
         if (!langFile.exists()) plugin.saveResource("lang.yml", true);
         plugin.setLangYaml(YamlConfiguration.loadConfiguration(langFile));
 
-        if (Bukkit.getPluginManager().getPlugin("Residence") != null) {
-            Bukkit.getConsoleSender().sendMessage(Colorful.valueOf("&a成功加载Residence"));
+        if (Bukkit.getPluginManager().getPlugin("Ranmc") != null) {
+            Bukkit.getConsoleSender().sendMessage(Colorful.valueOf("&a成功加载Ranmc"));
             plugin.setResidence(true);
         } else {
-            Bukkit.getConsoleSender().sendMessage(Colorful.valueOf("&c无法找到Residence"));
+            Bukkit.getConsoleSender().sendMessage(Colorful.valueOf("&c无法找到Ranmc"));
         }
     }
 
