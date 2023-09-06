@@ -14,7 +14,7 @@ public class GuiUtil {
     private static final ItemStack PANE = ItemBuilder.create(Material.GRAY_STAINED_GLASS_PANE, " ");
 
     public static void open(Player player) {
-        Inventory inventory = Bukkit.createInventory(null, 54, Colorful.valueOf("&e&l锁箱管理丨白名单"));
+        Inventory inventory = Bukkit.createInventory(null, 54, Colorful.valueOf("&d&l锁箱管理丨白名单"));
 
         List<String> trustList = DataUtil.getTrustList(player.getName());
 
@@ -30,13 +30,13 @@ public class GuiUtil {
         inventory.setItem(48, ItemBuilder.create(Material.SHEARS, "&b解锁", "&e对容器进行解锁"));
         inventory.setItem(51, ItemBuilder.create(Material.PLAYER_HEAD, "&b添加玩家", "&e不要分享权限给陌生人", "&e否则造成损失后果自负"));
         inventory.setItem(50, ItemBuilder.create(Material.REDSTONE, "&b自动锁定", "&e开关放置后自动锁箱"));
-        inventory.setItem(45, CLOSE);
+        inventory.setItem(45, RETURN);
         inventory.setItem(53, CLOSE);
         player.openInventory(inventory);
     }
 
     public static void openSecond(Player player) {
-        Inventory inventory = Bukkit.createInventory(null, 54, Colorful.valueOf("&e&l锁箱管理丨添加玩家"));
+        Inventory inventory = Bukkit.createInventory(null, 54, Colorful.valueOf("&d&l锁箱管理丨添加玩家"));
         List<String> trustList = DataUtil.getTrustList(player.getName());
         int inventorySize = 0;
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
