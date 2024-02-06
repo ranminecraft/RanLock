@@ -20,7 +20,7 @@ public class GUIListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         ItemStack clicked = event.getCurrentItem();
 
-        if (event.getView().getTitle().contains(Colorful.valueOf("&e&l锁箱管理丨白名单"))) {
+        if (event.getView().getTitle().contains(Colorful.valueOf("&d&l锁箱管理丨白名单"))) {
             // 取消点击
             event.setCancelled(true);
             if (clicked == null) return;
@@ -31,8 +31,13 @@ public class GUIListener implements Listener {
             }
 
             // 关闭菜单
-            if (event.getRawSlot() == 53 || event.getRawSlot() == 45) {
+            if (event.getRawSlot() == 53) {
                 player.closeInventory();
+                return;
+            }
+
+            if (event.getRawSlot() == 45) {
+                player.chat("/cd");
                 return;
             }
 
@@ -64,7 +69,7 @@ public class GUIListener implements Listener {
             }
         }
 
-        if (event.getView().getTitle().contains(Colorful.valueOf("&e&l锁箱管理丨添加玩家"))) {
+        if (event.getView().getTitle().contains(Colorful.valueOf("&d&l锁箱管理丨添加玩家"))) {
             // 取消点击
             event.setCancelled(true);
             if (clicked == null) return;
