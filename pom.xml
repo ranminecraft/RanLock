@@ -49,16 +49,9 @@
         <dependency>
             <groupId>cc.ranmc</groupId>
             <artifactId>Ranmc</artifactId>
-            <version>Release 14.3</version>
+            <version>Release</version>
             <scope>system</scope>
             <systemPath>D:/Project/Ranmc.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>cc.ranmc.sign</groupId>
-            <artifactId>SignMenuFactory</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>D:/Project/SignMenuFactory.jar</systemPath>
         </dependency>
     </dependencies>
 
