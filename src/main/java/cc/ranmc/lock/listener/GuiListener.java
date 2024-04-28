@@ -3,7 +3,7 @@ package cc.ranmc.lock.listener;
 import cc.ranmc.lock.util.Colorful;
 import cc.ranmc.lock.util.GuiUtil;
 import cc.ranmc.lock.util.ActionUtil;
-import cc.ranmc.sign.SignApi;
+import cc.ranmc.utils.InputUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -87,11 +87,8 @@ public class GUIListener implements Listener {
 
             // 添加白名单
             if (event.getRawSlot() == 49) {
-                SignApi.newMenu("此行输入玩家ID")
-                        .response((p, strings) -> {
-                            ActionUtil.trust(p, strings[0]);
-                            return true;
-                        }).open(player);
+                InputUtil.open(player, "玩家名称", context ->
+                        ActionUtil.trust(player, context));
             }
         }
     }
