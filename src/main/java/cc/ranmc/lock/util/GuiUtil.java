@@ -16,7 +16,7 @@ public class GuiUtil {
     public static void open(Player player) {
         Inventory inventory = Bukkit.createInventory(null, 54, Colorful.valueOf("&d&l锁箱管理丨白名单"));
 
-        List<String> trustList = DataUtil.getTrustList(player.getName());
+        List<String> trustList = LockUtil.getTrustList(player.getName());
 
         int inventorySize = 0;
         for(String name : trustList) {
@@ -37,7 +37,7 @@ public class GuiUtil {
 
     public static void openSecond(Player player) {
         Inventory inventory = Bukkit.createInventory(null, 54, Colorful.valueOf("&d&l锁箱管理丨添加玩家"));
-        List<String> trustList = DataUtil.getTrustList(player.getName());
+        List<String> trustList = LockUtil.getTrustList(player.getName());
         int inventorySize = 0;
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if (!trustList.contains(onlinePlayer.getName()) && onlinePlayer != player) {

@@ -2,20 +2,15 @@ package cc.ranmc.lock.command;
 
 import cc.ranmc.lock.Main;
 import cc.ranmc.lock.util.Colorful;
-import cc.ranmc.lock.util.DataUtil;
 import cc.ranmc.lock.util.GuiUtil;
-import cc.ranmc.lock.util.LoadTask;
+import cc.ranmc.lock.util.DataUtil;
 import cc.ranmc.lock.util.ActionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-import java.util.Map;
 
 public class LockCommand implements CommandExecutor {
 
@@ -29,67 +24,20 @@ public class LockCommand implements CommandExecutor {
         if (cmd.getName().equalsIgnoreCase("lock") && args.length == 1) {
             if (sender.hasPermission("lock.admin")) {
                 if (args[0].equalsIgnoreCase("reload")) {
-                    if (plugin.getSqLite() != null) plugin.getSqLite().close();
-                    LoadTask.start();
-                    sender.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("reload")));
+                    DataUtil.start();
+                    sender.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("reload", "重载成功")));
                     return true;
                 }
                 if (args[0].equalsIgnoreCase("save")) {
-                    LoadTask.end();
-                    sender.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("save")));
-                    return true;
-                }
-                if (args[0].equalsIgnoreCase("sync")) {
-                    if (!plugin.isEnableSqlite()) {
-                        sender.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("sql-not-enable")));
-                        return true;
-                    }
-                    sender.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("syncing")));
-
-                    if (plugin.isFolia()) {
-                        Bukkit.getServer().getAsyncScheduler().runNow(plugin, scheduledTask -> {
-                            int count = 0;
-                            Map<String,String> lockMap = plugin.getLockMap();
-                            for (String key : lockMap.keySet()) {
-                                plugin.getSqLite().insertLock(lockMap.get(key), DataUtil.getLocByStr(key));
-                                count++;
-                            }
-                            YamlConfiguration trustYml = plugin.getTrustYaml();
-                            for (String key : trustYml.getKeys(false)) {
-                                List<String> list = trustYml.getStringList(key);
-                                for (String name : list) {
-                                    plugin.getSqLite().insertTrust(key, name);
-                                    count++;
-                                }
-                            }
-                            sender.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("sync").replace("%count%", String.valueOf(count))));
-                        });
-                    } else {
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, ()-> {
-                            int count = 0;
-                            Map<String,String> lockMap = plugin.getLockMap();
-                            for (String key : lockMap.keySet()) {
-                                plugin.getSqLite().insertLock(lockMap.get(key), DataUtil.getLocByStr(key));
-                                count++;
-                            }
-                            YamlConfiguration trustYml = plugin.getTrustYaml();
-                            for (String key : trustYml.getKeys(false)) {
-                                List<String> list = trustYml.getStringList(key);
-                                for (String name : list) {
-                                    plugin.getSqLite().insertTrust(key, name);
-                                    count++;
-                                }
-                            }
-                            sender.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("sync").replace("%count%", String.valueOf(count))));
-                        });
-                    }
+                    DataUtil.save();
+                    sender.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("save", "保存成功")));
                     return true;
                 }
             }
         }
 
         if (!(sender instanceof Player player)) {
-            Bukkit.getConsoleSender().sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("console")));
+            Bukkit.getConsoleSender().sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("console", "该指令不能在控制台输入")));
             return true;
         }
 
@@ -97,7 +45,7 @@ public class LockCommand implements CommandExecutor {
          * 鉴权
          */
         if (!sender.hasPermission("lock.user")) {
-            player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("permission")));
+            player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("permission", "权限不足")));
             return true;
         }
 

@@ -3,10 +3,9 @@ package cc.ranmc.lock;
 import cc.ranmc.lock.command.LockCommand;
 import cc.ranmc.lock.listener.GUIListener;
 import cc.ranmc.lock.listener.BlockListener;
-import cc.ranmc.lock.sqlite.SQLite;
 import cc.ranmc.lock.util.Colorful;
 import cc.ranmc.lock.util.FoliaCheckUtil;
-import cc.ranmc.lock.util.LoadTask;
+import cc.ranmc.lock.util.DataUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -50,9 +49,6 @@ public class Main extends JavaPlugin implements Listener {
     private boolean residence = false;
     @Getter
     @Setter
-    private SQLite sqLite;
-    @Getter
-    @Setter
     private boolean enableSqlite = false;
     @Getter
     private final boolean folia = FoliaCheckUtil.isFolia();
@@ -62,7 +58,7 @@ public class Main extends JavaPlugin implements Listener {
         instance = this;
 
         // 加载配置
-        LoadTask.start();
+        DataUtil.start();
 
         // 注册 Event
         Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
@@ -82,9 +78,7 @@ public class Main extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         // 保存数据
-        LoadTask.end();
-        //关闭数据库
-        if (sqLite != null) sqLite.close();
+        DataUtil.save();
         super.onDisable();
     }
 }

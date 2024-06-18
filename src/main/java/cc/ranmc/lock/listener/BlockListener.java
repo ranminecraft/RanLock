@@ -3,7 +3,7 @@ package cc.ranmc.lock.listener;
 import cc.ranmc.lock.Main;
 import cc.ranmc.lock.util.BlockUtil;
 import cc.ranmc.lock.util.Colorful;
-import cc.ranmc.lock.util.DataUtil;
+import cc.ranmc.lock.util.LockUtil;
 import cc.ranmc.lock.util.ResCheck;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -33,11 +33,9 @@ public class BlockListener implements Listener {
         Block block = event.getBlock();
         if (!plugin.getConfig().getStringList("enable-world").contains(block.getWorld().getName())) return;
         Player player = event.getPlayer();
-        if (plugin.isEnableSqlite()) {
-            if (!plugin.getSqLite().selectAuto(player)) return;
-        } else if (plugin.getAutoYaml().getStringList("off").contains(player.getName())) return;
+        if (plugin.getAutoYaml().getStringList("off").contains(player.getName())) return;
         if (plugin.getConfig().getStringList("lock-block").contains(block.getType().toString())) {
-            DataUtil.lock(player.getName(), block.getLocation());
+            LockUtil.lock(player.getName(), block.getLocation());
             player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("place")));
         }
     }
@@ -51,7 +49,7 @@ public class BlockListener implements Listener {
         String owner = BlockUtil.getOwner(block);
         if (owner == null) return;
         if (player.getName().equalsIgnoreCase(BlockUtil.getOwner(block)) || plugin.getTrustYaml().getStringList(owner).contains(player.getName()) || player.hasPermission("lock.admin")) {
-            DataUtil.unlock(block.getLocation());
+            LockUtil.unlock(block.getLocation());
             player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("break")));
         } else {
             event.setCancelled(true);
@@ -83,15 +81,15 @@ public class BlockListener implements Listener {
                     event.setCancelled(true);
                     return;
                 }
-                DataUtil.lock(player.getName(), block.getLocation());
+                LockUtil.lock(player.getName(), block.getLocation());
                 player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("place")));
             }
             return;
         }
-        if (player.getName().equalsIgnoreCase(owner) || DataUtil.getTrustList(owner).contains(player.getName()) || player.hasPermission("lock.admin")) {
+        if (player.getName().equalsIgnoreCase(owner) || LockUtil.getTrustList(owner).contains(player.getName()) || player.hasPermission("lock.admin")) {
             if (plugin.getUnlockAction().contains(player.getName())) {
                 event.setCancelled(true);
-                DataUtil.unlock(block.getLocation());
+                LockUtil.unlock(block.getLocation());
                 player.sendMessage(Colorful.valueOf(plugin.getLangYaml().getString("break")));
             }
         } else {
