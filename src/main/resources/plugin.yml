@@ -4,7 +4,7 @@ description: '桃花源定制24k纯钛合金超级无敌终终终终极版的锁
 website: https://www.ranmc.cc/
 author: Ranica
 version: 3.5
-api-version: "1.20"
+api-version: "1.21"
 depend: [Ranmc]
 folia-supported: true
 
