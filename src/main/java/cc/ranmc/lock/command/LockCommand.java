@@ -2,7 +2,7 @@ package cc.ranmc.lock.command;
 
 import cc.ranmc.lock.Main;
 import cc.ranmc.lock.util.Colorful;
-import cc.ranmc.lock.util.GuiUtil;
+import cc.ranmc.lock.util.GUIUtil;
 import cc.ranmc.lock.util.DataUtil;
 import cc.ranmc.lock.util.ActionUtil;
 import org.bukkit.Bukkit;
@@ -53,7 +53,7 @@ public class LockCommand implements CommandExecutor {
          * 菜单
          */
         if (cmd.getName().equalsIgnoreCase("lock") && args.length == 1 && args[0].equals("gui")) {
-            GuiUtil.open(player);
+            GUIUtil.open(player);
             return true;
         }
 

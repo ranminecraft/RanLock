@@ -48,9 +48,6 @@ public class Main extends JavaPlugin implements Listener {
     @Setter
     private boolean residence = false;
     @Getter
-    @Setter
-    private boolean enableSqlite = false;
-    @Getter
     private final boolean folia = FoliaCheckUtil.isFolia();
 
     @Override

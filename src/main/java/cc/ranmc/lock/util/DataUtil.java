@@ -41,8 +41,6 @@ public class DataUtil {
         plugin.setLockYaml(YamlConfiguration.loadConfiguration(lockFile));
         plugin.setLockMap(new HashMap<>());
 
-        plugin.setEnableSqlite(plugin.getConfig().getBoolean("sqlite", false));
-        plugin.setEnableSqlite(false);
         for (String key : plugin.getLockYaml().getKeys(false)) {
             plugin.getLockMap().put(key, Objects.requireNonNull(plugin.getLockYaml().get(key)).toString());
         }
@@ -64,18 +62,16 @@ public class DataUtil {
     }
 
     public static void save() {
-        if (!plugin.isEnableSqlite()) {
-            YamlConfiguration yaml = new YamlConfiguration();
-            for (String key : plugin.getLockMap().keySet()) {
-                yaml.set(key, plugin.getLockMap().get(key));
-            }
-            try {
-                yaml.save(lockFile);
-                plugin.getTrustYaml().save(trustFile);
-                plugin.getAutoYaml().save(autoFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        YamlConfiguration yaml = new YamlConfiguration();
+        for (String key : plugin.getLockMap().keySet()) {
+            yaml.set(key, plugin.getLockMap().get(key));
+        }
+        try {
+            yaml.save(lockFile);
+            plugin.getTrustYaml().save(trustFile);
+            plugin.getAutoYaml().save(autoFile);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -1,7 +1,7 @@
 package cc.ranmc.lock.listener;
 
 import cc.ranmc.lock.util.Colorful;
-import cc.ranmc.lock.util.GuiUtil;
+import cc.ranmc.lock.util.GUIUtil;
 import cc.ranmc.lock.util.ActionUtil;
 import cc.ranmc.utils.InputUtil;
 import net.md_5.bungee.api.ChatColor;
@@ -43,7 +43,7 @@ public class GUIListener implements Listener {
 
             // 添加白名单
             if (event.getRawSlot() == 51) {
-                GuiUtil.openSecond(player);
+                GUIUtil.openSecond(player);
                 return;
             }
 
@@ -81,7 +81,7 @@ public class GUIListener implements Listener {
 
             // 关闭菜单
             if (event.getRawSlot() == 53 || event.getRawSlot() == 45) {
-                GuiUtil.open(player);
+                GUIUtil.open(player);
                 return;
             }
 

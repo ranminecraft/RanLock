@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class GuiUtil {
+public class GUIUtil {
     private static final ItemStack CLOSE = ItemBuilder.create(Material.RED_STAINED_GLASS_PANE, "&b关闭菜单");
     private static final ItemStack RETURN = ItemBuilder.create(Material.RED_STAINED_GLASS_PANE, "&b返回菜单");
     private static final ItemStack PANE = ItemBuilder.create(Material.GRAY_STAINED_GLASS_PANE, " ");
