@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -59,6 +60,26 @@ public class DataUtil {
         } else {
             Bukkit.getConsoleSender().sendMessage(Colorful.valueOf("&c无法找到Ranmc"));
         }
+    }
+
+    public static void migrate(String from, String to) {
+        for (String key : plugin.getLockMap().keySet()) {
+            if (plugin.getLockMap().get(key).equals(from)) {
+                plugin.getLockMap().put(key, to);
+            }
+        }
+
+        List<String> offLine = plugin.getAutoYaml().getStringList("off");
+        offLine.remove(to);
+        if (offLine.contains(from)) {
+            offLine.add(to);
+        }
+        offLine.remove(from);
+        plugin.getAutoYaml().set("off", offLine);
+
+        plugin.getTrustYaml().set(to, plugin.getTrustYaml().getStringList(from));
+        plugin.getTrustYaml().set(from, null);
+        DataUtil.save();
     }
 
     public static void save() {
