@@ -77,8 +77,14 @@ public class DataUtil {
         offLine.remove(from);
         plugin.getAutoYaml().set("off", offLine);
 
-        plugin.getTrustYaml().set(to, plugin.getTrustYaml().getStringList(from));
+        for (String key : plugin.getTrustYaml().getKeys(false)) {
+            List<String> trustList = plugin.getTrustYaml().getStringList(key);
+            trustList.remove(from);
+            plugin.getTrustYaml().set(key, trustList);
+        }
+
         plugin.getTrustYaml().set(from, null);
+        plugin.getTrustYaml().set(to, null);
         DataUtil.save();
     }
 
